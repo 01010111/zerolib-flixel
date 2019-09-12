@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<project>
-	
-	<assets path="assets/zfonts/square.json" rename="FONT_SQUARE" if="INCLUDE_Z_FONTS" embed='true' />
-	<assets path="assets/zfonts/nes.json" rename="FONT_NES" if="INCLUDE_Z_FONTS" embed='true' />
-	<assets path="assets/zfonts/autechre.json" rename="FONT_AUTECHRE" if="INCLUDE_Z_FONTS" embed='true' />
-
-</project>
