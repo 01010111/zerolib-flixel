@@ -2,7 +2,7 @@
 
 # ZEROLIB-FLIXEL
 
-![build status](https://api.travis-ci.org/01010111/zerolib-flixel.png)
+[![Build Status](https://travis-ci.org/01010111/zerolib-flixel.svg?branch=master)](https://travis-ci.org/01010111/zerolib-flixel)
 
 Zerolib-flixel is a library of extensions, utilities, and other helpful classes for making games quickly in haxeflixel!
 
