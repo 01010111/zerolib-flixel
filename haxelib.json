@@ -9,6 +9,7 @@
 	"contributors": ["01010111"],
 	"dependencies": {
 		"flixel": "",
-		"flixel-addons": ""
+		"flixel-addons": "",
+		"zerolib": ""
 	}
 }
