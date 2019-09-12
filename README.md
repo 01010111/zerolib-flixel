@@ -33,4 +33,4 @@ This library is split into several distinct sections:
 Check the WIKI for specific usage instructions!
 
 **[See example usage in the Wiki](https://github.com/01010111/zerolib-flixel/wiki)**  
-**[Browse the API](http://01010111.com/zerolib/)**
+**[Browse the API](http://01010111.com/zerolib-flixel/)**
