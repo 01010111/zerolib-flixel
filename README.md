@@ -1,4 +1,4 @@
-![zerolib logo](https://raw.githubusercontent.com/01010111/zerolib/storage/zerolib.png)
+![zerolib logo](https://raw.githubusercontent.com/01010111/zerolib/storage/zerolib-flixel.png)
 
 # ZEROLIB-FLIXEL
 
