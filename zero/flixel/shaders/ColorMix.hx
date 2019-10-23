@@ -26,6 +26,6 @@ class ColorMix extends FlxShader
     public function new(color:Int = 0xFFFFFFFF)
     {
         super();
-        this.color.value = color.to_vec4();
+        this.color.value = cast color.to_color();
     }
 }
