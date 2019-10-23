@@ -214,11 +214,16 @@ class PlatformSnap extends Component
 class AreaOverride extends Component
 {
 
-	var rects:Array<FlxRect>;
+	var rects:Array<AreaRect>;
 	var dolly:Dolly;
 
-	public function add_rect(rect:FlxRect) rects.push(rect);
-	public function remove_rect(rect:FlxRect) rects.remove(rect);
+	public function add_rect(rect:AreaRect)
+	{
+		rects.push(rect);
+		rects.sort((r1, r2) -> r1.priority > r2.priority ? 1 : -1);
+	}
+
+	public function remove_rect(rect:AreaRect) rects.remove(rect);
 
 	public function new(options:AreaOverrideOptions)
 	{
@@ -249,11 +254,16 @@ class AreaOverride extends Component
 		}
 	}
 
-	function override_target(rect:FlxRect)
+	function override_target(rect:AreaRect)
 	{
 		dolly.set_position(rect.x + rect.width/2, rect.y + rect.height/2);
 	}
 
+}
+
+class AreaRect extends FlxRect
+{
+	public var priority:Int = 0;
 }
 
 /**
