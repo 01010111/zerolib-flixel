@@ -8,6 +8,9 @@ using openfl.Assets;
 using zero.utilities.OgmoUtils;
 using zero.flixel.utilities.FlxOgmoUtils;
 
+/**
+ * A group of Utility functions for working with OGMO files (level .json and project .ogmo files) in haxeflixel
+ */
 class FlxOgmoUtils
 {
 
