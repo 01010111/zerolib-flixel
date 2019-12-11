@@ -1,5 +1,6 @@
 package zero.flixel.utilities;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
@@ -25,6 +26,23 @@ class FlxOgmoUtils
 		return {
 			project: project_path.getText().parse_project_json(),
 			level: level_path.getText().parse_level_json()
+		}
+	}
+
+	/**
+	 * Goes through every layer in an OGMO level and loads everything in order.
+	 * @param data 
+	 * @param options 
+	 */
+	public static function load_level(data:OgmoPackage, options:FlxOgmoLevelOptions)
+	{
+		var layers = data.project.layers.copy();
+		layers.reverse();
+		for (layer in layers) switch (layer.definition) {
+			case 'entity': data.level.get_entity_layer(layer.name).load_entities(options.entity_loader);
+			case 'decal': FlxG.state.add(data.level.get_decal_layer(layer.name).get_decal_group(options.decals_path, data.project.anglesRadians));
+			case 'tile': FlxG.state.add(new FlxTilemap().load_tilemap(data, options.tileset_path, layer.name));
+			case 'grid': options.grid_loader(data.level.get_grid_layer(layer.name));
 		}
 	}
 
@@ -90,13 +108,18 @@ class FlxOgmoUtils
 
 }
 
-@dox:hide()
 typedef OgmoPackage = {
 	project:ProjectData,
 	level:LevelData
 }
 
-@dox:hide()
+typedef FlxOgmoLevelOptions = {
+	tileset_path:String,
+	decals_path:String,
+	entity_loader:EntityData -> Void,
+	grid_loader:GridLayer -> Void,
+}
+
 enum ETileExportMode
 {
 	CSV;
