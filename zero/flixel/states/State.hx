@@ -3,6 +3,8 @@ package zero.flixel.states;
 import flixel.FlxG;
 import flixel.FlxState;
 
+using zero.utilities.EventBus;
+
 /**
  *  An extended FlxState
  */
@@ -24,8 +26,9 @@ class State extends FlxState
 	}
 
 	@:dox(hide)
-	override public function update(e)
+	override public function update(e:Float)
 	{
+		'update'.dispatch(e);
 		super.update(e);
 		check_reset();
 		if (esc_exits) check_esc();
