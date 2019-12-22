@@ -11,8 +11,6 @@ using zero.utilities.EventBus;
 class State extends FlxState
 {
 
-	var esc_exits:Bool;
-
 	/**
 	 *  Creates a new State with some options
 	 *  @param mouse_visible	whether or not the mouse is visible
@@ -20,21 +18,21 @@ class State extends FlxState
 	 */
 	public function new(mouse_visible:Bool = false, esc_exits:Bool = false)
 	{
-		#if !mobile FlxG.mouse.visible = mouse_visible; #end
-		this.esc_exits = esc_exits;
+		#if !mobile 
+			FlxG.mouse.visible = mouse_visible;			
+			#if cpp if (esc_exits) ((?_) -> if (FlxG.keys.justPressed.ESCAPE) lime.system.System.exit(0)).listen('update'); #end
+			#if debug ((?_) -> if (FlxG.keys.justPressed.R && FlxG.keys.pressed.ALT) FlxG.resetStateupdate()).listen('update'); #end
+		#end
 		super();
 	}
 
 	@:dox(hide)
-	override public function update(e:Float)
+	override public function update(dt:Float)
 	{
-		'update'.dispatch(e);
-		super.update(e);
-		check_reset();
-		if (esc_exits) check_esc();
+		'preupdate'.dispatch(dt);
+		'update'.dispatch(dt);
+		super.update(dt);
+		'postupdate'.dispatch(dt);
 	}
-
-	function check_esc() { #if (cpp && !mobile) if (FlxG.keys.justPressed.ESCAPE) lime.system.System.exit(0); #end }
-	function check_reset() { #if (debug && !mobile) if (FlxG.keys.justPressed.R && FlxG.keys.pressed.ALT) FlxG.resetState(); #end }
 
 }
