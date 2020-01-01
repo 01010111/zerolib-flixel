@@ -21,7 +21,7 @@ class State extends FlxState
 		#if !mobile 
 			FlxG.mouse.visible = mouse_visible;			
 			#if cpp if (esc_exits) ((?_) -> if (FlxG.keys.justPressed.ESCAPE) lime.system.System.exit(0)).listen('update'); #end
-			#if debug ((?_) -> if (FlxG.keys.justPressed.R && FlxG.keys.pressed.ALT) FlxG.resetStateupdate()).listen('update'); #end
+			#if debug ((?_) -> if (FlxG.keys.justPressed.R && FlxG.keys.pressed.ALT) FlxG.resetState()).listen('update'); #end
 		#end
 		super();
 	}
