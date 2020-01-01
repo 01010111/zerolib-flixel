@@ -57,10 +57,11 @@ class PlayerController extends Controller
 	/**
 	 *  Add this controller (and gamepad controller) to state, use instead of [FlxState].add(player_controller)
 	 */
-	override public function add()
+	override public function add():Controller
 	{
 		super.add();
 		gamepad.add();
+		return this;
 	}
 
 	/**

@@ -50,7 +50,10 @@ class Controller extends FlxBasic
 	/**
 	 *  Call this to add the controller to the state instead of [FlxState].add(controller)
 	 */
-	public function add() FlxG.state.add(this);
+	public function add() {
+		FlxG.state.add(this);
+		return this;
+	}
 
 	/**
 	 *  Returns a history of states for the controller
