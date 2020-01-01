@@ -39,10 +39,10 @@ class FlxOgmoUtils
 		var layers = data.project.layers.copy();
 		layers.reverse();
 		for (layer in layers) switch (layer.definition) {
-			case 'entity': data.level.get_entity_layer(layer.name).load_entities(options.entity_loader);
-			case 'decal': FlxG.state.add(data.level.get_decal_layer(layer.name).get_decal_group(options.decals_path, data.project.anglesRadians));
-			case 'tile': FlxG.state.add(new FlxTilemap().load_tilemap(data, options.tileset_path, layer.name));
-			case 'grid': options.grid_loader(data.level.get_grid_layer(layer.name));
+			case 'entity': if (options.entity_loader != null) data.level.get_entity_layer(layer.name).load_entities(options.entity_loader);
+			case 'decal': if (options.decals_path != null) FlxG.state.add(data.level.get_decal_layer(layer.name).get_decal_group(options.decals_path, data.project.anglesRadians));
+			case 'tile': if (options.tileset_path != null) FlxG.state.add(new FlxTilemap().load_tilemap(data, options.tileset_path, layer.name));
+			case 'grid': if (options.grid_loader != null) options.grid_loader(data.level.get_grid_layer(layer.name));
 		}
 	}
 
@@ -114,10 +114,10 @@ typedef OgmoPackage = {
 }
 
 typedef FlxOgmoLevelOptions = {
-	tileset_path:String,
-	decals_path:String,
-	entity_loader:EntityData -> Void,
-	grid_loader:GridLayer -> Void,
+	?tileset_path:String,
+	?decals_path:String,
+	?entity_loader:EntityData -> Void,
+	?grid_loader:GridLayer -> Void,
 }
 
 enum ETileExportMode
