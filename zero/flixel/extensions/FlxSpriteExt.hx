@@ -21,9 +21,6 @@ class FlxSpriteExt
 
 	/**
 	 *  Creates a hitbox and centers it on a FlxSprite's frame
-	 *  @param sprite	input sprite
-	 *  @param width	hitbox width
-	 *  @param height	hitbox height
 	 */
 	public static inline function make_and_center_hitbox(sprite:FlxSprite, width:Float, height:Float):Void
 	{
@@ -33,9 +30,6 @@ class FlxSpriteExt
 
 	/**
 	 *  Creates a hitbox and aligns it to the bottom center point of a FlxSprite's frame
-	 *  @param sprite	input sprite
-	 *  @param width	hitbox width
-	 *  @param height	hitbox height
 	 */
 	public static inline function make_anchored_hitbox(sprite:FlxSprite, width:Float, height:Float):Void
 	{
@@ -44,9 +38,15 @@ class FlxSpriteExt
 	}
 
 	/**
+	 * Set a sprite's hitbox from a rectangle relative to the sprite's frame
+	 */
+	public static inline function make_rect_hitbox(sprite:FlxSprite, x:Float, y:Float, width:Float, height:Float) {
+		sprite.offset.set(x, y);
+		sprite.setSize(width, height);
+	}
+
+	/**
 	 *  Sets both right and left facing flip
-	 *  @param sprite				input sprite
-	 *  @param graphic_facing_right	Whether or not the sprite's graphic is facing right
 	 */
 	public static inline function set_facing_flip_horizontal(sprite:FlxSprite, graphic_facing_right:Bool = true):Void
 	{
@@ -56,36 +56,26 @@ class FlxSpriteExt
 
 	/**
 	 *  Returns a bottom center point of a FlxSprite
-	 *  @param sprite	input sprite
-	 *  @return			FlxPoint
 	 */
 	public static inline function get_anchor(sprite:FlxSprite):FlxPoint return FlxPoint.get(sprite.x + sprite.width * 0.5, sprite.y + sprite.height);
 
 	/**
 	 *  Sets the position of a FlxSprite using a FlxPoint
-	 *  @param sprite	input sprite
-	 *  @param point	position
 	 */
 	public static inline function set_position(sprite:FlxSprite, point:FlxPoint) sprite.setPosition(point.x, point.y);
 
 	/**
 	 *  Sets the anchor (bottom center) position of a FlxSprite using a FlxPoint
-	 *  @param sprite	input sprite
-	 *  @param point	anchor position
 	 */
 	public static inline function set_anchor_position(sprite:FlxSprite, point:FlxPoint) sprite.setPosition(point.x - sprite.width * 0.5, point.y - sprite.height);
 
 	/**
 	 *  Sets the midpoint position of a FlxSprite using a FlxPoint
-	 *  @param sprite	input sprite
-	 *  @param point	midpoint position
 	 */
 	public static inline function set_midpoint_position(sprite:FlxSprite, point:FlxPoint) sprite.setPosition(point.x - sprite.width * 0.5, point.y - sprite.height * 0.5);
 
 	/**
 	 *  Add animations from JSON file
-	 *  @param sprite	input sprite
-	 *  @param json		json array of objects with fields { "name":string, "frames":number[], "speed":number, "loop":boolean }
 	 */
 	public static inline function add_animations_from_json(sprite:FlxSprite, json:String)
 	{
