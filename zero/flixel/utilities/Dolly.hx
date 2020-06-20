@@ -81,6 +81,7 @@ class Dolly extends Entity
 		if (!snap) return;
 		var m = target_object.getMidpoint();
 		setPosition(m.x, m.y);
+		set_position(m.x, m.y);
 	}
 
 	override function update(dt:Float)
@@ -210,7 +211,7 @@ class PlatformSnap extends Component
 		if (dolly.get_target().wasTouching & FlxObject.FLOOR > 0 && dolly.get_target().velocity.y >= 0) {
 			var target = dolly.get_target().y + dolly.get_target().height - offset;
 			var current = dolly.get_position().y;
-			var next = current + ((target - current) * lerp).min(max_speed * dt).max(-max_speed * dt) ;
+			var next = current + ((target - current) * lerp).min(max_speed * dt).max(-max_speed * dt);
 			dolly.set_position_y(next);
 		}
 	}
