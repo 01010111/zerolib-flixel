@@ -195,7 +195,6 @@ class PlatformSnap extends Component
 		offset = options.offset == null ? 0 : options.offset;
 		max_speed = options.max_speed == null ? 9e9 : options.max_speed;
 		lerp = options.lerp == null ? 0.1 : options.lerp;
-		trace(max_speed);
 	}
 
 	override function on_add()
