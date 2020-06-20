@@ -184,6 +184,8 @@ class PlatformSnap extends Component
 
 	var dolly:Dolly;
 	var offset:Float;
+	var max_speed:Float;
+	var lerp:Float;
 
 	public function set_offset(value:Float) offset = value;
 
@@ -191,6 +193,9 @@ class PlatformSnap extends Component
 	{
 		super('${Dolly.c} Platform Snap');
 		offset = options.offset == null ? 0 : options.offset;
+		max_speed = options.max_speed == null ? 9e9 : options.max_speed;
+		lerp = options.lerp == null ? 0.1 : options.lerp;
+		trace(max_speed);
 	}
 
 	override function on_add()
@@ -203,7 +208,12 @@ class PlatformSnap extends Component
 
 	override function update(dt:Float)
 	{
-		if (dolly.get_target().wasTouching & FlxObject.FLOOR > 0 && dolly.get_target().velocity.y >= 0) dolly.set_position_y(dolly.get_target().y + dolly.get_target().height - offset);
+		if (dolly.get_target().wasTouching & FlxObject.FLOOR > 0 && dolly.get_target().velocity.y >= 0) {
+			var target = dolly.get_target().y + dolly.get_target().height - offset;
+			var current = dolly.get_position().y;
+			var next = current + ((target - current) * lerp).min(max_speed * dt).max(-max_speed * dt) ;
+			dolly.set_position_y(next);
+		}
 	}
 
 }
@@ -349,11 +359,13 @@ typedef WindowConstraintOptions =
 typedef PlatformSnapOptions = 
 {
 	?offset:Float,
+	?max_speed:Float,
+	?lerp:Float,
 }
 
 typedef AreaOverrideOptions = 
 {
-	rects:Array<FlxRect>,
+	rects:Array<AreaRect>,
 }
 
 typedef ForwardFocusOptions = {
