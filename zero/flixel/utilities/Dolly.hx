@@ -109,6 +109,14 @@ class Dolly extends Entity
 
 }
 
+typedef DollyOptions = 
+{
+	target:FlxObject,
+	?camera:FlxCamera,
+	?lerp:{ x:Float, y:Float },
+	?max_velocity:{ x:Float, y:Float },
+}
+
 /**
  * The equivalent of FlxCameraFollowStyle.LOCKON, might come in handy
  */
@@ -177,6 +185,13 @@ class WindowConstraint extends Component
 
 }
 
+typedef WindowConstraintOptions =
+{
+	width:Float,
+	height:Float,
+	?axes:EAxes,
+}
+
 /**
  * Will move the dolly to meet a target's vertical position when a target is touching the ground
  */
@@ -218,6 +233,13 @@ class PlatformSnap extends Component
 
 }
 
+typedef PlatformSnapOptions = 
+{
+	?offset:Float,
+	?max_speed:Float,
+	?lerp:Float,
+}
+
 /**
  * When a target overlaps one of the given rectangles, the dolly will center on the overlapped rectangle
  */
@@ -248,7 +270,7 @@ class AreaOverride extends Component
 		for (rect in rects)
 		{
 			var s = new FlxSprite(rect.x, rect.y);
-			s.makeGraphic(rect.width.to_int(), rect.height.to_int(), 0x00FFFFFF);
+			s.makeGraphic(rect.width.to_int(), rect.height.to_int(), 0x00FFFFFF, true);
 			s.draw_dashed_rect(FlxRect.get(0.5, 0.5, rect.width - 1, rect.height - 1), 8, 0xFF0080FF);
 			FlxG.state.add(s);
 		}
@@ -274,6 +296,110 @@ class AreaOverride extends Component
 class AreaRect extends FlxRect
 {
 	public var priority:Int = 0;
+}
+
+typedef AreaOverrideOptions = 
+{
+	rects:Array<AreaRect>,
+}
+
+class BoundsOverride extends Component {
+
+	var rects:Array<AreaRect>;
+	var dolly:Dolly;
+	var active_rect:FlxRect;
+	var cam_bounds_ref:FlxRect;
+	var cam_bounds:FlxRect = FlxRect.get();
+	var target_rect:FlxRect;
+	var cam:FlxCamera;
+	var lerp:Float;
+
+	public function add_rect(rect:AreaRect)
+	{
+		rects.push(rect);
+		rects.sort((r1, r2) -> r1.priority > r2.priority ? 1 : -1);
+	}
+
+	public function remove_rect(rect:AreaRect) {
+		if (rect == active_rect) on_exit();
+		rects.remove(rect);
+	}
+
+	public function new(options:BoundsOverrideOptions)
+	{
+		super('${Dolly.c} Area Override');
+		reset(options);
+	}
+	
+	public function reset(options:BoundsOverrideOptions)
+	{
+		cam_bounds_ref = new FlxRect(options.tilemap.x, options.tilemap.y, options.tilemap.width, options.tilemap.height);
+		cam = options.camera == null ? FlxG.camera : options.camera;
+		options.tilemap.follow(cam);
+		rects = options.rects;
+		lerp = options.lerp == null ? 0.025 : options.lerp;
+		cam_bounds = FlxRect.get();
+		cam_bounds_ref.copyTo(cam_bounds);
+		set_bounds(cam_bounds_ref);
+	}	
+
+	override function on_add()
+	{
+		dolly = cast entity;
+		#if CAM_DEBUG
+		for (rect in rects)
+		{
+			var s = new FlxSprite(rect.x, rect.y);
+			s.makeGraphic(rect.width.to_int(), rect.height.to_int(), 0x00FFFFFF, true);
+			s.draw_dashed_rect(FlxRect.get(0.5, 0.5, rect.width - 1, rect.height - 1), 8, 0xFF00A0FF);
+			FlxG.state.add(s);
+		}
+		#end
+	}
+
+	override function update(dt:Float)
+	{
+		var t = dolly.get_target();
+		if (active_rect == null) for (rect in rects) check_rect(t, rect);
+		else if (!in_rect(t, active_rect)) on_exit();
+		cam_bounds.x += (target_rect.x - cam_bounds.x) * lerp;
+		cam_bounds.y += (target_rect.y - cam_bounds.y) * lerp;
+		cam_bounds.width += (target_rect.width - cam_bounds.width) * lerp;
+		cam_bounds.height += (target_rect.height - cam_bounds.height) * lerp;
+		cam.setScrollBoundsRect(cam_bounds.x, cam_bounds.y, cam_bounds.width, cam_bounds.height);
+	}
+
+	function check_rect(t:FlxObject, r:FlxRect) {
+		if (in_rect(t, r)) on_enter(r);
+	}
+
+	function in_rect(t:FlxObject, r:FlxRect) {
+		if (r == null) return false;
+		return t.x > r.left && t.x + t.width < r.right && t.y > r.top && t.y + t.height < r.bottom;
+	}
+
+	function on_enter(rect:FlxRect)
+	{
+		active_rect = rect;
+		set_bounds(rect);
+	}
+
+	function on_exit() {
+		active_rect = null;
+		set_bounds(cam_bounds_ref);
+	}
+	
+	function set_bounds(rect:FlxRect) {
+		target_rect = rect;
+	}
+
+}
+
+typedef BoundsOverrideOptions = {
+	> AreaOverrideOptions,
+	tilemap:FlxTilemap,
+	?lerp:Float,
+	?camera:FlxCamera,
 }
 
 /**
@@ -322,6 +448,11 @@ class ForwardFocus extends Component
 
 }
 
+typedef ForwardFocusOptions = {
+	offset:Float,
+	?threshold:Float,
+}
+
 /**
  * The camera won't move beyond the edges of a given tilemap
  */
@@ -339,38 +470,6 @@ class FollowTilemap extends Component
 		options.camera == null ? options.tilemap.follow(FlxG.camera) : options.tilemap.follow(options.camera);
 	} 
 
-}
-
-typedef DollyOptions = 
-{
-	target:FlxObject,
-	?camera:FlxCamera,
-	?lerp:{ x:Float, y:Float },
-	?max_velocity:{ x:Float, y:Float },
-}
-
-typedef WindowConstraintOptions =
-{
-	width:Float,
-	height:Float,
-	?axes:EAxes,
-}
-
-typedef PlatformSnapOptions = 
-{
-	?offset:Float,
-	?max_speed:Float,
-	?lerp:Float,
-}
-
-typedef AreaOverrideOptions = 
-{
-	rects:Array<AreaRect>,
-}
-
-typedef ForwardFocusOptions = {
-	offset:Float,
-	?threshold:Float,
 }
 
 typedef FollowTilemapOptions = 
