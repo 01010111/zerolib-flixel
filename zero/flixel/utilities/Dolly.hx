@@ -333,9 +333,9 @@ class BoundsOverride extends Component {
 	
 	public function reset(options:BoundsOverrideOptions)
 	{
-		cam_bounds_ref = new FlxRect(options.tilemap.x, options.tilemap.y, options.tilemap.width, options.tilemap.height);
+		cam_bounds_ref = options.bounds;
 		cam = options.camera == null ? FlxG.camera : options.camera;
-		options.tilemap.follow(cam);
+		cam.setScrollBoundsRect(options.bounds.x, options.bounds.y, options.bounds.width, options.bounds.height);
 		rects = options.rects;
 		lerp = options.lerp == null ? 0.025 : options.lerp;
 		cam_bounds = FlxRect.get();
@@ -397,7 +397,7 @@ class BoundsOverride extends Component {
 
 typedef BoundsOverrideOptions = {
 	> AreaOverrideOptions,
-	tilemap:FlxTilemap,
+	bounds:FlxRect,
 	?lerp:Float,
 	?camera:FlxCamera,
 }
