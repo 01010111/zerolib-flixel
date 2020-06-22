@@ -341,7 +341,7 @@ class BoundsOverride extends Component {
 		cam_bounds = FlxRect.get();
 		cam_bounds_ref.copyTo(cam_bounds);
 		set_bounds(cam_bounds_ref);
-	}	
+	}
 
 	override function on_add()
 	{
