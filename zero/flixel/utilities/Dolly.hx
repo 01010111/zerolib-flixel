@@ -1,5 +1,6 @@
 package zero.flixel.utilities;
 
+import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
 import flixel.math.FlxRect;
 import flixel.math.FlxPoint;
@@ -313,6 +314,7 @@ class BoundsOverride extends Component {
 	var target_rect:FlxRect;
 	var cam:FlxCamera;
 	var lerp:Float;
+	var max_delta:Float;
 
 	public function add_rect(rect:AreaRect)
 	{
@@ -327,7 +329,7 @@ class BoundsOverride extends Component {
 
 	public function new(options:BoundsOverrideOptions)
 	{
-		super('${Dolly.c} Area Override');
+		super('${Dolly.c} Bounds Override');
 		reset(options);
 	}
 	
@@ -337,7 +339,8 @@ class BoundsOverride extends Component {
 		cam = options.camera == null ? FlxG.camera : options.camera;
 		cam.setScrollBoundsRect(options.bounds.x, options.bounds.y, options.bounds.width, options.bounds.height);
 		rects = options.rects;
-		lerp = options.lerp == null ? 0.025 : options.lerp;
+		lerp = options.lerp == null ? 0.05 : options.lerp;
+		max_delta = options.max_delta == null ? 9e9 : options.max_delta;
 		cam_bounds = FlxRect.get();
 		cam_bounds_ref.copyTo(cam_bounds);
 		set_bounds(cam_bounds_ref);
@@ -362,10 +365,10 @@ class BoundsOverride extends Component {
 		var t = dolly.get_target();
 		if (active_rect == null) for (rect in rects) check_rect(t, rect);
 		else if (!in_rect(t, active_rect)) on_exit();
-		cam_bounds.x += (target_rect.x - cam_bounds.x) * lerp;
-		cam_bounds.y += (target_rect.y - cam_bounds.y) * lerp;
-		cam_bounds.width += (target_rect.width - cam_bounds.width) * lerp;
-		cam_bounds.height += (target_rect.height - cam_bounds.height) * lerp;
+		cam_bounds.x += ((target_rect.x - cam_bounds.x) * lerp).max(-max_delta).min(max_delta);
+		cam_bounds.y += ((target_rect.y - cam_bounds.y) * lerp).max(-max_delta).min(max_delta);
+		cam_bounds.width += ((target_rect.width - cam_bounds.width) * lerp).max(-max_delta).min(max_delta);
+		cam_bounds.height += ((target_rect.height - cam_bounds.height) * lerp).max(-max_delta).min(max_delta);
 		cam.setScrollBoundsRect(cam_bounds.x, cam_bounds.y, cam_bounds.width, cam_bounds.height);
 	}
 
@@ -382,6 +385,13 @@ class BoundsOverride extends Component {
 	{
 		active_rect = rect;
 		set_bounds(rect);
+		var combined_rect = FlxRect.get();
+		combined_rect.x = Math.min(cam.scroll.x, rect.x);
+		combined_rect.y = Math.min(cam.scroll.y, rect.y);
+		combined_rect.right = Math.max(cam.scroll.x + cam.width, rect.right);
+		combined_rect.bottom = Math.max(cam.scroll.y + cam.height, rect.bottom);
+		cam_bounds.copyFrom(combined_rect);
+		combined_rect.put();
 	}
 
 	function on_exit() {
@@ -399,6 +409,7 @@ typedef BoundsOverrideOptions = {
 	> AreaOverrideOptions,
 	bounds:FlxRect,
 	?lerp:Float,
+	?max_delta:Float,
 	?camera:FlxCamera,
 }
 
