@@ -313,7 +313,8 @@ class BoundsOverride extends Component {
 	var cam_bounds:FlxRect = FlxRect.get();
 	var target_rect:FlxRect;
 	var cam:FlxCamera;
-	var lerp:Float;
+	var in_lerp:Float;
+	var out_lerp:Float;
 	var max_delta:Float;
 
 	public function add_rect(rect:AreaRect)
@@ -339,7 +340,8 @@ class BoundsOverride extends Component {
 		cam = options.camera == null ? FlxG.camera : options.camera;
 		cam.setScrollBoundsRect(options.bounds.x, options.bounds.y, options.bounds.width, options.bounds.height);
 		rects = options.rects;
-		lerp = options.lerp == null ? 0.05 : options.lerp;
+		in_lerp = options.in_lerp == null ? 0.05 : options.in_lerp;
+		out_lerp = options.out_lerp == null ? 0.02 : options.out_lerp;
 		max_delta = options.max_delta == null ? 9e9 : options.max_delta;
 		cam_bounds = FlxRect.get();
 		cam_bounds_ref.copyTo(cam_bounds);
@@ -365,6 +367,7 @@ class BoundsOverride extends Component {
 		var t = dolly.get_target();
 		if (active_rect == null) for (rect in rects) check_rect(t, rect);
 		else if (!in_rect(t, active_rect)) on_exit();
+		var lerp = active_rect == null ? out_lerp : in_lerp;
 		cam_bounds.x += ((target_rect.x - cam_bounds.x) * lerp).max(-max_delta).min(max_delta);
 		cam_bounds.y += ((target_rect.y - cam_bounds.y) * lerp).max(-max_delta).min(max_delta);
 		cam_bounds.width += ((target_rect.width - cam_bounds.width) * lerp).max(-max_delta).min(max_delta);
@@ -408,7 +411,8 @@ class BoundsOverride extends Component {
 typedef BoundsOverrideOptions = {
 	> AreaOverrideOptions,
 	bounds:FlxRect,
-	?lerp:Float,
+	?in_lerp:Float,
+	?out_lerp:Float,
 	?max_delta:Float,
 	?camera:FlxCamera,
 }
