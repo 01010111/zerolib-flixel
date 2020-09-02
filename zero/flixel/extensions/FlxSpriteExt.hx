@@ -9,6 +9,7 @@ import flixel.math.FlxPoint;
 using openfl.Assets;
 using haxe.Json;
 using zero.extensions.FloatExt;
+using zero.extensions.StringExt;
 using flixel.util.FlxSpriteUtil;
 using zero.flixel.extensions.FlxPointExt;
 using zero.flixel.extensions.FlxSpriteExt;
@@ -79,7 +80,7 @@ class FlxSpriteExt
 	 */
 	public static inline function add_animations_from_json(sprite:FlxSprite, json:String)
 	{
-		var anim_data:Array<SpriteAnimation> = json.getText().parse();
+		var anim_data:Array<SpriteAnimation> = json.getText().parse_json();
 		for (animation in anim_data) add_animation(sprite, animation);
 	}
 
