@@ -64,10 +64,10 @@ class FourColor extends FlxShader
 	public function set_color(index:PaletteIndex, color:Int)
 	{
 		switch (index) {
-			case BLACK:			col_0.value = color.to_vec4();
-			case DARK_GREY:		col_1.value = color.to_vec4();
-			case LIGHT_GREY:	col_2.value = color.to_vec4();
-			case WHITE:			col_3.value = color.to_vec4();
+			case BLACK:			col_0.value = cast color.to_color();
+			case DARK_GREY:		col_1.value = cast color.to_color();
+			case LIGHT_GREY:	col_2.value = cast color.to_color();
+			case WHITE:			col_3.value = cast color.to_color();
 		}
 	}
 
