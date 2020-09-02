@@ -10,7 +10,6 @@ class Entity extends FlxSprite
 {
 
 	var components:Map<String, Component> = new Map();
-	var tags:Array<String> = [];
 	var name:String = 'Unknown';
 
 	/**
@@ -69,23 +68,6 @@ class Entity extends FlxSprite
 		if (!components.exists(name)) LOG('No components with name: $name exist!', ERROR);
 		return components[name];
 	}
-
-	/**
-	 *  Add tag to this Entity
-	 *  @param tag	tag name
-	 */
-	public function add_tag(tag:String)
-	{
-		if (tags.indexOf(tag) >= 0) LOG('tag: $tag already exists!', WARNING);
-		else tags.push(tag);
-	}
-
-	/**
-	 *  Checks whether or not this Entity has a tag
-	 *  @param tag	tag name
-	 *  @return		Bool
-	 */
-	public inline function has_tag(tag:String):Bool return tags.indexOf(tag) >= 0;
 	
 	/**
 	 *  returns the name of this Entity
