@@ -44,7 +44,6 @@ class FourColor extends FlxShader
 	 */
 	public function set_palette(palette:Array<Int>)
 	{
-		trace(palette);
 		if (palette.length != 4)
 		{
 			GameLog.LOG('requires 4 Ints', ERROR);
