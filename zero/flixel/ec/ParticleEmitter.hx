@@ -4,6 +4,8 @@ import flixel.group.FlxGroup;
 import flixel.math.FlxPoint;
 import zero.flixel.ec.Entity;
 
+using zero.flixel.utilities.FlxTags;
+
 /**
  * A particle emitter class.
  */
@@ -46,7 +48,7 @@ class Particle extends Entity
 	public function new()
 	{
 		super();
-		add_tag('particle');
+		this.add_tag('particle');
 		exists = false;
 	}
 
