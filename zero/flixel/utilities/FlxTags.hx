@@ -47,10 +47,12 @@ class FlxTags {
 		for (array in map) array.remove(object);
 	}
 
-	public static function get_objects(tag:String):Array<FlxObject> {
+	public static function get_objects(tag:String, only_alive:Bool = false):Array<FlxObject> {
 		if (!map.exists(tag)) return [];
 		for (object in map[tag]) if (object == null) map[tag].remove(object);
-		return map[tag].copy();
+		var out = map[tag].copy();
+		if (only_alive) return [for (object in out) if (object.alive) object];
+		return out;
 	}
 
 }
