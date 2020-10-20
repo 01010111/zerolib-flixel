@@ -75,5 +75,6 @@ typedef FireOptions =
 	?util_amount:Float,
 	?util_color:Int,
 	?util_int:Int,
-	?util_bool:Bool
+	?util_bool:Bool,
+	?data:Dynamic,
 }
