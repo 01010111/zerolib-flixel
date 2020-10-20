@@ -129,13 +129,17 @@ class FamiController {
 				if (FlxG.mouse.pressed) '1_${button}_PRESSED'.dispatch();
 				if (FlxG.mouse.justReleased) '1_${button}_JUST_RELEASED'.dispatch();
 			case RIGHT:
+				#if !FLX_NO_MOUSE_ADVANCED
 				if (FlxG.mouse.justPressedRight) '1_${button}_JUST_PRESSED'.dispatch();
 				if (FlxG.mouse.pressedRight) '1_${button}_PRESSED'.dispatch();
 				if (FlxG.mouse.justReleasedRight) '1_${button}_JUST_RELEASED'.dispatch();
+				#end
 			case MIDDLE:
+				#if !FLX_NO_MOUSE_ADVANCED
 				if (FlxG.mouse.justPressedMiddle) '1_${button}_JUST_PRESSED'.dispatch();
 				if (FlxG.mouse.pressedMiddle) '1_${button}_PRESSED'.dispatch();
 				if (FlxG.mouse.justReleasedMiddle) '1_${button}_JUST_RELEASED'.dispatch();
+				#end
 		}		
 	}
 	#end
