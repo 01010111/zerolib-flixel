@@ -31,7 +31,9 @@ class ParticleEmitter extends FlxTypedGroup<Particle>
 	public function fire(options:FireOptions)
 	{
 		while (getFirstAvailable() == null) add(new_particle());
-		getFirstAvailable().fire(options);
+		var particle = getFirstAvailable();
+		particle.fire(options);
+		return particle;
 	}
 
 }
