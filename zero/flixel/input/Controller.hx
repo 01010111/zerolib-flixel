@@ -79,21 +79,21 @@ class Controller extends FlxBasic
 	 *  @param button	button query
 	 *  @return			Bool
 	 */
-	public inline function pressed(button:ControllerButton):Bool return state[button];
+	public function pressed(button:ControllerButton):Bool return state[button];
 
 	/**
 	 *  Gets the just pressed state of a button
 	 *  @param button	button query
 	 *  @return			Bool
 	 */
-	public inline function just_pressed(button:ControllerButton):Bool history.length == 0 ? return false : return state[button] && !history[history.length - 1][button];
+	public function just_pressed(button:ControllerButton):Bool history.length == 0 ? return false : return state[button] && !history[history.length - 1][button];
 	
 	/**
 	 *  Gets the just released state of a button
 	 *  @param button	button query
 	 *  @return			Bool
 	 */
-	public inline function just_released(button:ControllerButton):Bool history.length == 0 ? return false : return !state[button] && history[history.length - 1][button];
+	public function just_released(button:ControllerButton):Bool history.length == 0 ? return false : return !state[button] && history[history.length - 1][button];
 
 	override public function destroy()
 	{
