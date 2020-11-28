@@ -49,7 +49,7 @@ class OverlapUtil extends FlxObject {
 	
 	function process_pairs() {
 		var process = (o1, o2, listener) -> {
-			if (listener.separate) FlxObject.separate(o1, o2);
+			if (listener.separate) if (!FlxObject.separate(o1, o2)) return;
 			if (listener.callback != null) listener.callback(o1, o2);
 		}
 		for (listener in listeners) for (pair in pairs) {
