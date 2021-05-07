@@ -55,4 +55,6 @@ class FlxTags {
 		return out;
 	}
 
+	public static function clear_tags() map = [];
+
 }
