@@ -53,6 +53,7 @@ class OverlapUtil extends FlxObject {
 			if (listener.callback != null) listener.callback(o1, o2);
 		}
 		for (listener in listeners) for (pair in pairs) {
+			if (!pair.o1.alive || !pair.o2.alive) continue;
 			if (pair.o1.has_tag(listener.tag1) && pair.o2.has_tag(listener.tag2)) process(pair.o1, pair.o2, listener);
 			else if (pair.o1.has_tag(listener.tag2) && pair.o2.has_tag(listener.tag1)) process(pair.o2, pair.o1, listener);
 		}
