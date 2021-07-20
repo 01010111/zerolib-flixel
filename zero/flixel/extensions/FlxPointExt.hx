@@ -85,7 +85,11 @@ class FlxPointExt
 	 *  @param p	input point
 	 *  @return		Vector
 	 */
-	public static inline function to_vector(p:FlxPoint):Vec2 return Vec2.get(p.x, p.y);
+	public static inline function to_vector(p:FlxPoint, weak:Bool = false):Vec2 {
+		var out = Vec2.get(p.x, p.y);
+		if (weak) p.put();
+		return out;
+	}
 
 	/**
 	 *  returns a new IntPoint with the same coordinates, translated to Ints
