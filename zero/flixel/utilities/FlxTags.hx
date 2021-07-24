@@ -47,6 +47,12 @@ class FlxTags {
 		for (array in map) array.remove(object);
 	}
 
+	public static function get_tags(object:FlxObject) {
+		var out = [];
+		for (tag => arr in map) if (arr.contains(object)) out.push(tag);
+		return out;
+	}
+
 	public static function get_objects(tag:String, only_alive:Bool = false):Array<FlxObject> {
 		if (!map.exists(tag)) return [];
 		for (object in map[tag]) if (object == null) map[tag].remove(object);
