@@ -26,13 +26,11 @@ class FlxTags {
 	
 	static var map:Map<String, Array<FlxObject>> = [];
 
-    public static function add_tag(object:FlxObject, tag:String) {
-		if (!map.exists(tag)) map.set(tag, []);
-		map[tag].push(object);
-	}
-
-	public static function add_tags(object:FlxObject, tags:Array<String>) {
-		for (tag in tags) add_tag(object, tag);
+    public static function add_tag(object:FlxObject, ...tags:String) {
+		for (tag in tags) {
+			if (!map.exists(tag)) map.set(tag, []);
+			map[tag].push(object);
+		}
 	}
 
 	public static function remove_tag(object:FlxObject, tag:String) {
