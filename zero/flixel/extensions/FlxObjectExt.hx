@@ -37,4 +37,7 @@ class FlxObjectExt
 	 */
 	public static inline function set_midpoint_position(object:FlxObject, point:FlxPoint) object.setPosition(point.x - object.width * 0.5, point.y - object.height * 0.5);
 
+	public static inline function midpoint_x(object:FlxObject) return object.x + object.width/2;
+	public static inline function midpoint_y(object:FlxObject) return object.y + object.height/2;
+
 }
