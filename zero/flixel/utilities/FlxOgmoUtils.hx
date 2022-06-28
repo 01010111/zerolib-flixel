@@ -1,13 +1,19 @@
 package zero.flixel.utilities;
 
+import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
+import zero.utilities.GOAP.IAgent;
+import flixel.system.FlxAssets.FlxTilemapGraphicAsset;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.tile.FlxTilemap;
+import flixel.addons.tile.FlxTilemapExt;
+import flixel.addons.tile.FlxTileSpecial;
 
 using openfl.Assets;
 using zero.utilities.OgmoUtils;
 using zero.flixel.utilities.FlxOgmoUtils;
+using zero.extensions.Tools;
 
 /**
  * A group of Utility functions for working with OGMO files (level .json and project .ogmo files) in haxeflixel
@@ -41,7 +47,7 @@ class FlxOgmoUtils
 		for (layer in layers) switch (layer.definition) {
 			case 'entity': if (options.entity_loader != null) data.level.get_entity_layer(layer.name).load_entities(options.entity_loader);
 			case 'decal': if (options.decals_path != null) FlxG.state.add(data.level.get_decal_layer(layer.name).get_decal_group(options.decals_path, data.project.anglesRadians));
-			case 'tile': if (options.tileset_path != null) FlxG.state.add(new FlxTilemap().load_tilemap(data, options.tileset_path, layer.name));
+			case 'tile': if (options.tileset_path != null) FlxG.state.add(new FlxTilemapExt().load_tilemap(data, options.tileset_path, layer.name));
 			case 'grid': if (options.grid_loader != null) options.grid_loader(data.level.get_grid_layer(layer.name));
 		}
 	}
@@ -53,16 +59,42 @@ class FlxOgmoUtils
 	 * @param tileset_path The path to the directory containing your tileset images
 	 * @param tile_layer The name of your tile layer
 	 */
-	public static function load_tilemap(tilemap:FlxTilemap, data:OgmoPackage, tileset_path:String, tile_layer:String = 'tiles')
+	public static function load_tilemap(tilemap:FlxTilemapExt, data:OgmoPackage, tileset_path:String, tile_layer:String = 'tiles')
 	{
 		if (tileset_path.charAt(tileset_path.length - 1) != '/') tileset_path += '/';
+
 		var layer = data.level.get_tile_layer(tile_layer);
 		var tileset = data.project.get_tileset_data(layer.tileset);
+
+		var data:Array<Array<Int>> = [];
 		switch layer.get_export_mode() {
-			case CSV: tilemap.loadMapFromCSV(layer.dataCSV, tileset.get_tileset_path(tileset_path), tileset.tileWidth, tileset.tileHeight);
-			case ARRAY: tilemap.loadMapFromArray(layer.data, layer.gridCellsX, layer.gridCellsY, tileset.get_tileset_path(tileset_path), tileset.tileWidth, tileset.tileHeight);
-			case ARRAY2D: tilemap.loadMapFrom2DArray(layer.data2D, tileset.get_tileset_path(tileset_path), tileset.tileWidth, tileset.tileHeight);
+			case CSV: for (row in layer.dataCSV.split('\n')) data.push(row.split('').strings_to_ints());
+			case ARRAY: data = layer.data.expand(layer.gridCellsX);
+			case ARRAY2D: data = layer.data2D;
 		}
+
+		tilemap.loadMapFrom2DArray(data, tileset.get_tileset_path(tileset_path), tileset.tileWidth, tileset.tileHeight);
+
+		if (layer.tileFlags2D != null) {
+			var special = [];
+			for (j in 0...layer.tileFlags2D.length) for (i in 0...layer.tileFlags2D[j].length) {
+				var flag = layer.tileFlags2D[j][i];
+				if (flag == 0) {
+					special.push(null);
+					continue;
+				}
+				var flip_x = false;
+				var flip_y = false;
+				if (flag & 4 > 0) flip_x = !flip_x;
+				if (flag & 2 > 0) flip_y = !flip_y;
+				if (flag & 1 > 0) flip_x = !flip_x;
+				special.push(new FlxTileSpecial(data[j][i], flip_x, flip_y, flag & 1));
+			}
+			tilemap.setSpecialTiles(special);
+		}
+
+		tilemap.useScaleHack = false;
+
 		return tilemap;
 	}
 
@@ -89,6 +121,17 @@ class FlxOgmoUtils
 		return g;
 	}
 
+	public static function grid_to_tilemap(layer:GridLayer, options:TilemapOptions) {
+		var tilemap = new FlxTilemap();
+		var data = [];
+		if (layer.grid2D != null) for (row in layer.grid2D) data.push(row.strings_to_ints());
+		if (layer.grid != null) for (row in layer.grid.expand(layer.gridCellsX)) data.push(row.strings_to_ints());
+		tilemap.loadMapFrom2DArray(data, options.graphic, options.tile_width, options.tile_height, options.auto_tile, options.starting_index, options.draw_index, options.collision_index);
+		if (options.collision_map != null) for (id => col in options.collision_map) tilemap.setTileProperties(id, col);
+		tilemap.useScaleHack = false;
+		return tilemap;
+	}
+
 	static function get_tileset_path(data:ProjectTilesetData, path:String):String
 	{
 		return path + data.path.split('/').pop();
@@ -111,6 +154,17 @@ class FlxOgmoUtils
 typedef OgmoPackage = {
 	project:ProjectData,
 	level:LevelData
+}
+
+typedef TilemapOptions = {
+	graphic:FlxTilemapGraphicAsset,
+	?tile_width:Int,
+	?tile_height:Int,
+	?auto_tile:FlxTilemapAutoTiling,
+	?starting_index:Int,
+	?draw_index:Int,
+	?collision_index:Int,
+	?collision_map:Map<Int, Int>,
 }
 
 typedef FlxOgmoLevelOptions = {
