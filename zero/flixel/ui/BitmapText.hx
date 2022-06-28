@@ -46,6 +46,10 @@ class BitmapText extends FlxBitmapText
 		caps_case = options.charset.indexOf('a') >= 0 ? options.charset.indexOf('A') >= 0 ? MIXED : LOWERCASE : options.charset.indexOf('A') >= 0 ? UPPERCASE : NONE;
 	}
 
+	public function set_field_width(w:Int) {
+		set_fieldWidth(w);
+	}
+
 }
 
 typedef BitmapTextOptions =
