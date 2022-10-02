@@ -51,8 +51,8 @@ class FlxSpriteExt
 	 */
 	public static inline function set_facing_flip_horizontal(sprite:FlxSprite, graphic_facing_right:Bool = true):Void
 	{
-		sprite.setFacingFlip(FlxObject.LEFT, graphic_facing_right, false);
-		sprite.setFacingFlip(FlxObject.RIGHT, !graphic_facing_right, false);
+		sprite.setFacingFlip(LEFT, graphic_facing_right, false);
+		sprite.setFacingFlip(RIGHT, !graphic_facing_right, false);
 	}
 
 	/**
@@ -111,15 +111,15 @@ class FlxSpriteExt
 	{
 		return switch (object.facing)
 		{
-			case FlxObject.UP: 270;
-			case FlxObject.DOWN: 90;
-			case FlxObject.LEFT: 180;
-			case FlxObject.RIGHT: 0;
+			case UP: 270;
+			case DOWN: 90;
+			case LEFT: 180;
+			case RIGHT: 0;
 			default: 0;
 		}
 	}
 
-	public static inline function is_facing_object(subject:FlxSprite, object:FlxObject):Bool return subject.getMidpoint().x > object.getMidpoint().x && subject.facing == FlxObject.LEFT || subject.getMidpoint().x < object.getMidpoint().x && subject.facing == FlxObject.RIGHT;
+	public static inline function is_facing_object(subject:FlxSprite, object:FlxObject):Bool return subject.getMidpoint().x > object.getMidpoint().x && subject.facing == LEFT || subject.getMidpoint().x < object.getMidpoint().x && subject.facing == RIGHT;
 
 }
 
