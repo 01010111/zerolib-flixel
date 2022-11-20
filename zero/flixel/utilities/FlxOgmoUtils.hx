@@ -93,7 +93,9 @@ class FlxOgmoUtils
 			tilemap.setSpecialTiles(special);
 		}
 
+		#if (flixel < "5.0.0")
 		tilemap.useScaleHack = false;
+		#end
 
 		return tilemap;
 	}
@@ -128,7 +130,9 @@ class FlxOgmoUtils
 		if (layer.grid != null) for (row in layer.grid.expand(layer.gridCellsX)) data.push(row.strings_to_ints());
 		tilemap.loadMapFrom2DArray(data, options.graphic, options.tile_width, options.tile_height, options.auto_tile, options.starting_index, options.draw_index, options.collision_index);
 		if (options.collision_map != null) for (id => col in options.collision_map) tilemap.setTileProperties(id, col);
+		#if (flixel < "5.0.0")
 		tilemap.useScaleHack = false;
+		#end
 		return tilemap;
 	}
 

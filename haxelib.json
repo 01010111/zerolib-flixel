@@ -1,11 +1,11 @@
 {
-	"name": "zerolib",
-	"url" : "https://github.com/01010111/zerolib",
+	"name": "zerolib-flixel",
+	"url" : "https://github.com/01010111/zerolib-flixel",
 	"license": "MIT",
 	"tags": ["game", "flixel", "openfl", "flash", "html5", "neko", "cpp", "android", "ios", "cross"],
 	"description": "Zerolib is a library of extensions, utilities, and other helpful classes for making games quickly in haxeflixel!",
-	"version": "0.6.0",
-	"releasenote": "Moved flixel related utilities from zerolib to zerolib-flixel!",
+	"version": "0.8.1",
+	"releasenote": "Added utilities - FlxTags and OverlapUtil - to help with batching quad tree usage!",
 	"contributors": ["01010111"],
 	"dependencies": {
 		"flixel": "",
