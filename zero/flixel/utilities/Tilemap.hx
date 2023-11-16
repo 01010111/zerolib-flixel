@@ -9,10 +9,9 @@ class Tilemap extends flixel.addons.tile.FlxTilemapExt {
 
 	public function new() {
 		super();
-		useScaleHack = false;
 	}
-	
-	public function load_data(options:TilemapOptions) {		
+
+	public function load_data(options:TilemapOptions) {
 		map = options.data;
 		loadMapFrom2DArray(options.data, options.tiles, options.tile_width, options.tile_height);
 		if (options.flags != null) set_rotations(options.flags);

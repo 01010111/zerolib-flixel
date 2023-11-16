@@ -23,8 +23,8 @@ class FlxOgmoUtils
 
 	/**
 	 * Returns a handy object containing OgmoProjectData and OgmoLevelData
-	 * @param project_path 
-	 * @param level_path 
+	 * @param project_path
+	 * @param level_path
 	 * @return OgmoPackage
 	 */
 	public static function get_ogmo_package(project_path:String, level_path:String):OgmoPackage
@@ -37,8 +37,8 @@ class FlxOgmoUtils
 
 	/**
 	 * Goes through every layer in an OGMO level and loads everything in order.
-	 * @param data 
-	 * @param options 
+	 * @param data
+	 * @param options
 	 */
 	public static function load_level(data:OgmoPackage, options:FlxOgmoLevelOptions)
 	{
@@ -123,7 +123,7 @@ class FlxOgmoUtils
 		return g;
 	}
 
-	public static function grid_to_tilemap(layer:GridLayer, options:TilemapOptions) {
+	public static function grid_to_tilemap(layer:GridLayer, options:TileOptions) {
 		var tilemap = new FlxTilemap();
 		var data = [];
 		if (layer.grid2D != null) for (row in layer.grid2D) data.push(row.strings_to_ints());
@@ -160,7 +160,7 @@ typedef OgmoPackage = {
 	level:LevelData
 }
 
-typedef TilemapOptions = {
+typedef TileOptions = {
 	graphic:FlxTilemapGraphicAsset,
 	?tile_width:Int,
 	?tile_height:Int,
